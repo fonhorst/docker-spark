@@ -1,0 +1,9 @@
+[supervisord]
+nodaemon=true
+
+[program:sshd]
+command=service sshd start
+autorestart=false
+
+[program:bash]
+command=/bin/bash
