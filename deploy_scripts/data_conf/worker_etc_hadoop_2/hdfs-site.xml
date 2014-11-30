@@ -9,6 +9,6 @@
     </property>
     <property>
         <name>dfs.datanode.data.dir</name>
-        <value>/opt</value>
+        <value>/opt/hdfs_dir</value>
     </property>
 </configuration>
