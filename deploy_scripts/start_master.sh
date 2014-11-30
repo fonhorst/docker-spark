@@ -10,11 +10,13 @@ function start_master() {
     base_dir=$(pwd)
     svisor_conf=$base_dir"/data_conf/master_supervisord.conf":"/etc/supervisor/conf.d/supervisord.conf"
     yarn_confs=$base_dir"/data_conf/master_etc_hadoop":"/usr/local/hadoop/etc/hadoop"
-
+    
+    ports_forwarding="-p 44040:4040" 
+   
     if [ "$DEBUG" -gt 0 ]; then
-        echo "sudo docker run -d --dns $NAMESERVER_IP -h master${DOMAINNAME} -v $svisor_conf -v $yarn_confs $VOLUME_MAP $1"
+        echo "sudo docker run -d --dns $NAMESERVER_IP -h master${DOMAINNAME} $ports_forwarding -v $svisor_conf -v $yarn_confs $VOLUME_MAP $1"
     fi
-    MASTER=$(sudo docker run -d --dns $NAMESERVER_IP -h master${DOMAINNAME} -v $svisor_conf -v $yarn_confs $VOLUME_MAP $1) 
+    MASTER=$(sudo docker run -d --dns $NAMESERVER_IP -h master${DOMAINNAME} $ports_forwarding -v $svisor_conf -v $yarn_confs $VOLUME_MAP $1) 
 
     if [ "$MASTER" = "" ]; then
         echo "error: could not start master container from image $1"

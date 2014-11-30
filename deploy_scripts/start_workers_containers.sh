@@ -8,11 +8,11 @@ NUM_REGISTERED_WORKERS=0
 function start_workers_containers() {
 	base_dir=$(pwd)
     svisor_conf=$base_dir"/data_conf/worker_supervisord.conf":"/etc/supervisor/conf.d/supervisord.conf"
-    yarn_confs=$base_dir"/data_conf/worker_etc_hadoop":"/usr/local/hadoop/etc/hadoop"
 	
     for i in `seq 1 $NUM_WORKERS`; do
         echo "starting worker container"
 	hostname="worker${i}${DOMAINNAME}"
+        yarn_confs=$base_dir"/data_conf/worker_etc_hadoop_${i}":"/usr/local/hadoop/etc/hadoop"
         if [ "$DEBUG" -gt 0 ]; then
 	    echo sudo docker run -d --dns $NAMESERVER_IP -h $hostname -v $svisor_conf -v $yarn_confs  $VOLUME_MAP $1
         fi
