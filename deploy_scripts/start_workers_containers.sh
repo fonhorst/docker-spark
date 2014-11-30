@@ -15,10 +15,18 @@ function start_workers_containers() {
         yarn_confs=$base_dir"/data_conf/worker_etc_hadoop_${i}":"/usr/local/hadoop/etc/hadoop"
 	med_data="/opt/med_data":"/opt/med_data"
         med_script="/opt/sequenceiq_spark/handle_med_data.sh":"/opt/hmed.sh"
-        if [ "$DEBUG" -gt 0 ]; then
-	    echo sudo docker run -d --dns $NAMESERVER_IP -h $hostname -v $svisor_conf -v $yarn_confs -v $med_data -v $med_script $VOLUME_MAP $1
+	
+	if [ "$i" -eq 1 ]; then
+		cpuset="0,1,2,3,8,9,10,11"
+	else
+		cpuset="4,5,12"
+	fi	
+        
+
+	if [ "$DEBUG" -gt 0 ]; then
+	    echo sudo docker run -d --dns $NAMESERVER_IP -h $hostname --cpuset=$cpuset  -v $svisor_conf -v $yarn_confs -v $med_data -v $med_script $VOLUME_MAP $1
         fi
-	WORKER=$(sudo docker run -d --dns $NAMESERVER_IP -h $hostname -v $svisor_conf -v $yarn_confs -v $med_data -v $med_script $VOLUME_MAP $1)
+	WORKER=$(sudo docker run -d --dns $NAMESERVER_IP -h $hostname --cpuset=$cpuset  -v $svisor_conf -v $yarn_confs -v $med_data -v $med_script $VOLUME_MAP $1)
 
         if [ "$WORKER" = "" ]; then
             echo "error: could not start worker container from image $1"

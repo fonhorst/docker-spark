@@ -32,7 +32,7 @@ fi
 START=$(date +%s.%N)
 
 for file in $FILES; do
-	java -jar /opt/med_data/ECG_analise.jar $file 12 16 
+	/usr/java/default/bin/java -Xmx1024m -Xms256m -jar /opt/med_data/ECG_analise.jar $file 12 16 
 done
 
 END=$(date +%s.%N)
